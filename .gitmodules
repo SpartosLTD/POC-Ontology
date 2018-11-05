@@ -1,0 +1,3 @@
+[submodule "ontology-java-sdk"]
+	path = ontology-java-sdk
+	url = git@github.com:rodionaltshuler/ontology-java-sdk.git

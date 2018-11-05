@@ -1,0 +1,2 @@
+rootProject.name = 'ontologyperformancetests'
+include ':ontology-java-sdk'
