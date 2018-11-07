@@ -1,0 +1,108 @@
+{
+	"info": {
+		"_postman_id": "ae1d66ef-ffc3-4d05-aa82-6c1808728882",
+		"name": "Ontology",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Place bets",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"betsCount\": 100\n}"
+				},
+				"url": {
+					"raw": "{{SERVER_URL}}/placeBets",
+					"host": [
+						"{{SERVER_URL}}"
+					],
+					"path": [
+						"placeBets"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Metrics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{SERVER_URL}}/metrics",
+					"host": [
+						"{{SERVER_URL}}"
+					],
+					"path": [
+						"metrics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Owner balance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{SERVER_URL}}/owner/balance",
+					"host": [
+						"{{SERVER_URL}}"
+					],
+					"path": [
+						"owner",
+						"balance"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Settle",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"count\": 100,\n\t\"outcome\": 1\n}"
+				},
+				"url": {
+					"raw": "{{SERVER_URL}}/settle",
+					"host": [
+						"{{SERVER_URL}}"
+					],
+					"path": [
+						"settle"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
