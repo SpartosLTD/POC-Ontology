@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,12 +29,15 @@ public class TransactionService {
 
     private StorageService storageService;
 
+    private Function<String[], RandomNodeSdk> sdkFactory;
+
     @Autowired
-    public TransactionService(OntSdk sdk, Account ownerAccount, @Qualifier("betting_contract_code_address") String codeAddress, StorageService storageService) {
+    public TransactionService(OntSdk sdk, Account ownerAccount, @Qualifier("betting_contract_code_address") String codeAddress, StorageService storageService, Function<String[], RandomNodeSdk> sdkFactory) {
         this.sdk = sdk;
         this.ownerAccount = ownerAccount;
         this.codeAddress = codeAddress;
         this.storageService = storageService;
+        this.sdkFactory = sdkFactory;
     }
 
     public List<CompletableFuture<Object>> settle(SettleRequest request) {
@@ -48,6 +52,7 @@ public class TransactionService {
 
     public List<CompletableFuture<Object>> placeBets(PlaceBetsRequest request) {
         reset();
+        RandomNodeSdk randomNodeSdk = sdkFactory.apply(request.getnodeUrls());
         return IntStream.range(0, request.getBetsCount())
                 .mapToObj(i -> CompletableFuture.supplyAsync(() -> {
                     String address = "Player" + i;
@@ -59,7 +64,7 @@ public class TransactionService {
                     Parameter outcomeParam = new Parameter("outcome", Parameter.Type.Integer, outcome);
 
                     AbiFunction func = new AbiFunction("PlaceBet", addressParam, amountParam, outcomeParam);
-                    return sendTransaction(func);
+                    return sendTransaction(func, randomNodeSdk.getRandom());
                 })).collect(Collectors.toList());
     }
 
@@ -79,13 +84,17 @@ public class TransactionService {
         }
     }
 
-    private Object sendTransaction(AbiFunction func) {
+    private Object sendTransaction(AbiFunction func, OntSdk sdk) {
         try {
             return sdk.neovm().sendTransaction(Helper.reverse(codeAddress), ownerAccount, ownerAccount, sdk.DEFAULT_GAS_LIMIT * 1000, 0, func, false);
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new RuntimeException(e);
         }
+    }
+
+    private Object sendTransaction(AbiFunction func) {
+        return sendTransaction(func, sdk);
     }
 
 }
