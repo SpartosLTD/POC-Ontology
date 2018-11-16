@@ -4,6 +4,7 @@ from boa.interop.System.Blockchain import GetHeight, GetHeader, GetTimestamp
 from boa.interop.System.Storage import GetContext, Get, Put, Delete
 from boa.interop.System.Header import GetMerkleRoot, GetTimestamp, GetHash, GetVersion, GetConsensusData, GetNextConsensus
 from boa.builtins import concat
+from boa.interop.System.Runtime import GetTime
 
 OWNER_ADDRESS = "OwnerAddress"
 
@@ -21,6 +22,7 @@ BETS_COUNT_KEY = "Count"
 BET_BEGIN_TIMESTAMP_KEY = "Begin"
 BET_END_TIMESTAMP_KEY = "End"
 
+context = GetContext()
 
 OnBetPlaced = RegisterAction('bet_placed', 'address', 'amount', 'outcome')
 
@@ -39,7 +41,6 @@ def Main(operation, args):
     return False
 
 def Reset(deleteBets):
-    context = GetContext()
     Put(context, concat(BALANCE_KEY, OWNER_ADDRESS), INITIAL_OWNER_BALANCE)
 
     Delete(context, SETTLEMENT_BEGIN_TIMESTAMP_KEY)
@@ -66,8 +67,6 @@ def Reset(deleteBets):
     return True
 
 def Settle(outcome):
-    context = GetContext()
-
     settlementBeginTimestamp = Get(context, SETTLEMENT_BEGIN_TIMESTAMP_KEY)
     if settlementBeginTimestamp == None:
         date = currentTimestamp()
@@ -100,7 +99,6 @@ def Settle(outcome):
     return True
 
 def transfer(addressFrom, addressTo, amount):
-    context = GetContext()
     senderAmount = Get(context, concat(BALANCE_KEY, addressFrom))
     if (senderAmount >= amount):
         senderAmount -= amount;
@@ -114,10 +112,8 @@ def transfer(addressFrom, addressTo, amount):
 
 
 def PlaceBet(address, amount, outcome):
-    context = GetContext()
-
     #Get bets counter
-    count = Get(context, "Count")
+    count = Get(context, BETS_COUNT_KEY)
     if len(count) == 0:
         count = 0
 
@@ -134,19 +130,15 @@ def PlaceBet(address, amount, outcome):
 
     #Update counter
     count += 1
-    Put(context, "Count", count)
+    Put(context, BETS_COUNT_KEY, count)
 
     #Performance metrics
     date = currentTimestamp()
     firstBlockTime = Get(context, BET_BEGIN_TIMESTAMP_KEY)
     if firstBlockTime == None:
         Put(context, BET_BEGIN_TIMESTAMP_KEY, date)
-    Delete(context, BET_END_TIMESTAMP_KEY)
     Put(context, BET_END_TIMESTAMP_KEY, date)
     return True
 
 def currentTimestamp():
-    context = GetContext()
-    currentHeight = GetHeight()
-    header = GetHeader(currentHeight)
-    return GetTimestamp(header)
+    return GetTime()
