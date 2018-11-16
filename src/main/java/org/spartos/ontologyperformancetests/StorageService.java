@@ -3,7 +3,6 @@ package org.spartos.ontologyperformancetests;
 import com.github.ontio.OntSdk;
 import com.github.ontio.account.Account;
 import com.github.ontio.common.Helper;
-import com.github.ontio.network.exception.ConnectorException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import javax.xml.bind.DatatypeConverter;
-import java.io.IOException;
 import java.nio.charset.Charset;
 
 @Service
@@ -63,7 +61,7 @@ public class StorageService {
     public Long getLongValueFromStorage(String key) {
         try {
             String storageValue = sdk.getConnect().getStorage(codeAddress, Helper.toHexString(key.getBytes()));
-            if (storageValue.isEmpty()) return 0l;
+            if (storageValue.isEmpty()) return 0L;
             return Long.parseLong(Helper.reverse(storageValue), 16);
         } catch (Exception e) {
             throw new RuntimeException(e);

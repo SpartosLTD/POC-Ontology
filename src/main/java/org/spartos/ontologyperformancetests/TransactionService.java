@@ -23,7 +23,6 @@ public class TransactionService {
     private static final Logger LOG = LoggerFactory.getLogger(TransactionService.class.getSimpleName());
 
     private Account ownerAccount;
-    private OntSdk sdk;
 
     private String codeAddress;
 
@@ -31,9 +30,10 @@ public class TransactionService {
 
     private Function<String[], RandomNodeSdk> sdkFactory;
 
+    private static final int GAS_PRICE = 0;
+
     @Autowired
-    public TransactionService(OntSdk sdk, Account ownerAccount, @Qualifier("betting_contract_code_address") String codeAddress, StorageService storageService, Function<String[], RandomNodeSdk> sdkFactory) {
-        this.sdk = sdk;
+    public TransactionService(Account ownerAccount, @Qualifier("betting_contract_code_address") String codeAddress, StorageService storageService, Function<String[], RandomNodeSdk> sdkFactory) {
         this.ownerAccount = ownerAccount;
         this.codeAddress = codeAddress;
         this.storageService = storageService;
@@ -44,14 +44,14 @@ public class TransactionService {
         List<CompletableFuture<Object>> results = IntStream.range(0, request.getCount())
                 .mapToObj(value -> CompletableFuture.supplyAsync(() -> {
                     AbiFunction func = new AbiFunction("Settle", new Parameter("outcome", Parameter.Type.Integer, request.getOutcome()));
-                    return sendTransaction(func);
+                    return sendTransaction(func, request.getNodeUrls());
                 })).collect(Collectors.toList());
         return results;
     }
 
 
     public List<CompletableFuture<Object>> placeBets(PlaceBetsRequest request) {
-        reset();
+        reset(request.getnodeUrls());
         RandomNodeSdk randomNodeSdk = sdkFactory.apply(request.getnodeUrls());
         return IntStream.range(0, request.getBetsCount())
                 .mapToObj(i -> CompletableFuture.supplyAsync(() -> {
@@ -64,37 +64,32 @@ public class TransactionService {
                     Parameter outcomeParam = new Parameter("outcome", Parameter.Type.Integer, outcome);
 
                     AbiFunction func = new AbiFunction("PlaceBet", addressParam, amountParam, outcomeParam);
-                    return sendTransaction(func, randomNodeSdk.getRandom());
+                    return sendTransaction(func, request.getnodeUrls());
                 })).collect(Collectors.toList());
     }
 
-    private void reset() {
+    private void reset(String[] nodeUrls) {
         try {
             AbiFunction func = new AbiFunction("Reset", new Parameter("deleteBets", Parameter.Type.Boolean, false));
 
-            sendTransaction(func);
+            sendTransaction(func, nodeUrls);
             Thread.sleep(7000);
             long countAfrerReset = storageService.getLongValueFromStorage("Count");
 
             LOG.info("Bets count after reset: " + countAfrerReset);
 
         } catch (Exception e) {
-            //Error is OK, we're deleting Count during Reset() from Storage
-            LOG.error(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
-    private Object sendTransaction(AbiFunction func, OntSdk sdk) {
+    private Object sendTransaction(AbiFunction func, String[] nodeUrls) {
         try {
-            return sdk.neovm().sendTransaction(Helper.reverse(codeAddress), ownerAccount, ownerAccount, sdk.DEFAULT_GAS_LIMIT * 1000, 0, func, false);
+            OntSdk sdk = sdkFactory.apply(nodeUrls).getRandom();
+            return sdk.neovm().sendTransaction(Helper.reverse(codeAddress), ownerAccount, ownerAccount, sdk.DEFAULT_GAS_LIMIT * 1000, GAS_PRICE, func, false);
         } catch (Exception e) {
             LOG.error(e.getMessage());
             throw new RuntimeException(e);
         }
     }
-
-    private Object sendTransaction(AbiFunction func) {
-        return sendTransaction(func, sdk);
-    }
-
 }
