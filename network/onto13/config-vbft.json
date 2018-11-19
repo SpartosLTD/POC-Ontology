@@ -1,0 +1,50 @@
+{
+  "SeedList": [
+          "35.246.154.139:20339",
+          "35.246.240.237:20339",
+          "35.246.251.248:20339",
+          "35.246.129.108:20339",
+          "35.189.107.181:20339",
+          "35.242.143.155:20339",
+          "35.240.40.207:20339",
+          "35.246.133.234:20339",
+          "35.246.251.64:20339",
+          "35.246.193.125:20339",
+          "35.246.241.85:20339",
+          "35.189.106.29:20339",
+          "35.189.110.55:20339"
+  ],
+  "ConsensusType":"vbft",
+  "VBFT":{
+  "n":13,
+  "c":4,
+  "k":13,
+  "l":208,
+  "init_txid": 0,
+  "genesis_timestamp": 0,
+  "block_msg_delay":10000,
+  "hash_msg_delay":10000,
+  "peer_handshake_timeout":10,
+  "max_block_change_view":30000,
+  "admin_ont_id":"did:ont:ARiwjLzjzLKZy8V43vm6yUcRG9b56DnZtY",
+  "min_init_stake":10000,
+   "vrf_value":"1c9810aa9822e511d5804a9c4db9dd08497c31087b0daafa34d768a3253441fa20515e2f30f81741102af0ca3cefc4818fef16adb825fbaa8cad78647f3afb590e",
+  "vrf_proof":"c57741f934042cb8d8b087b44b161db56fc3ffd4ffb675d36cd09f83935be853d8729f3f5298d12d6fd28d45dde515a4b9d7f67682d182ba5118abf451ff1988",
+  "peers":[
+    { "index":1, "peerPubkey":"0323b0cc4bf8078c6b9ecff8a728ece256d1833011e36a88b62a8053474c9b29ea", "address":"AcPuXkJ3B8xqSP6NNzt29zq3PHBXH3VWRL", "initPos":20000 },
+    { "index":2, "peerPubkey":"03a61c644cf10b355605254f550c0c8ca3e183f5290cfc41c03ac0aca6f630a199", "address":"ASpEV5gMxLbt455Mup9R2waCkipEmNjHwP", "initPos":20000 },
+    { "index":3, "peerPubkey":"030b6a2a2af515bc83f0ee714ece316c715c9591c4f853c07ee24740d5fd588fa7", "address":"AHtaTrVBae9b9LSkWyXkACaVRjQkU6rhAH", "initPos":20000 },
+    { "index":4, "peerPubkey":"03565673c5bdf72f9253af6ca0a2ad4ded682d87174931a725af3a80fe7fb164fc", "address":"Adg6eo2w5w7fuM7UYS2hZpdQmnaP4v5kzk", "initPos":20000 },
+    { "index":5, "peerPubkey":"035063773e073c14120b916c77b36416388bd16ccd7fefaac065b744b522acb106", "address":"Aed3DdCsSzeeQ3R8dJJTJvv6kLZzfHfMPp", "initPos":20000 },
+    { "index":6, "peerPubkey":"02903a15e06a93930ddc4fe515b9be92f96eb992bd162b9fbc32c396674e9c605d", "address":"AK35Do3w7sctiPbYgwUgqWiXGJPnEFQA1Z", "initPos":20000 },
+    { "index":7, "peerPubkey":"0268d577a45f2a4bf9f54a32a4281d702cfad9c01d470c94cfc6b8f500e47fa99b", "address":"APVpZVDSggwocwKWDoMmmWkA5fzh99iJmB", "initPos":20000 },
+    { "index":8, "peerPubkey":"03bb938efedc860a1ddc3e5b38efe8250aecf9a35229ac151aab775aa14f9e15b5", "address":"AVXS1A9f7dU4fMjsmuqm6KdFuGyQmAaHHE", "initPos":20000 },
+    { "index":9, "peerPubkey":"03038d78a7b3f376c15eec5973f1d67e66fefde1c1db6bbf54d45b8edcbd53a7fe", "address":"AJ3j1id1UTY2RWJ1XBqKhjDssaEMREpF85", "initPos":20000 },
+    { "index":10, "peerPubkey":"02d756a091bf9403d47726b337e4536a7af30e4e4558d184f3f0e26a4c63ac9a64", "address":"AbuF7KG4mXfhPN9ghRYHw3EjKUPgxaUxpD", "initPos":20000 },
+    { "index":11, "peerPubkey":"03c1d822879874dcf0f6eac97c81b8407611f29b780a3a6fe03f4af89beec71054", "address":"ATcq342MkYfQkCP88tn67nS1zWWmTrQ3be", "initPos":20000 },
+    { "index":12, "peerPubkey":"03346a0d9c8182211fb0f94adfe758563f43e785ab6349bf3857ac20d806733f8a", "address":"ANjgRrTfiSpc9mwRWQ5yDs4evEe3H9QdcT", "initPos":20000 },
+    { "index":13, "peerPubkey":"03ad6f596b60ff60d69cab1e1ea98bbc05bb183de7a24d7b046ec4250a3118c3a0", "address":"ASB2oWujXgwAPZm4sM9RqEgZwwSvnQ848E", "initPos":20000 }
+
+  ]
+}
+}
