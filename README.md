@@ -29,7 +29,8 @@ curl -X POST \
   http://localhost:5001/placeBets \
   -H 'Content-Type: application/json' \
   -d '{
-	"betsCount": 100
+	"nodeUrls": ["http://38.240.41.207","http://38.189.106.39"],
+	"betsCount": 10000
 }'
 
 
@@ -39,6 +40,7 @@ curl -X POST \
   http://localhost:5001/settle \
   -H 'Content-Type: application/json' \
   -d '{
+	"nodeUrls": ["http://38.240.41.207","http://38.189.106.39"],
 	"count": 10000,
 	"outcome": 1
 }'
